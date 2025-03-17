@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Property{% endblock %}
+
+{% block content %}
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-6 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">➕ Add New Property</h1>
+            <a href="{% url 'listings:property_list' %}"
+               class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded shadow transition duration-300">
+                🔙 Back to Listings
+            </a>
+        </div>
+    </header>
+
+    <!-- Form Section -->
+    <main class="container mx-auto my-10">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+
+        <!-- Display Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="mb-4 p-4 rounded
+                    {% if message.tags == 'error' %} bg-red-100 text-red-800 border border-red-300
+                    {% elif message.tags == 'success' %} bg-green-100 text-green-800 border border-green-300
+                    {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        <!-- Display Form Errors -->
+        {% if form.errors %}
+            <div class="mb-4 p-4 rounded bg-red-100 text-red-800 border border-red-300">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Property Form -->
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+            {{ form.as_p }}
+                <div>
+                    <button type="submit"
+                            class="w-full bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                        ➕ Add Property
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Property Listings. All rights reserved.</p>
+        </div>
+    </footer>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Property{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-3xl font-bold text-center mb-6 text-indigo-600">📅 Book Property: {{ property.title }}</h2>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <div>
+            <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date:</label>
+            <input type="text" id="start_date" name="start_date"
+                   class="border border-gray-300 rounded-lg p-2 w-full focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+            <label for="end_date" class="block text-sm font-medium text-gray-700">End Date:</label>
+            <input type="text" id="end_date" name="end_date"
+                   class="border border-gray-300 rounded-lg p-2 w-full focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+            Proceed to Payment
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookedDates = JSON.parse('{{ booked_dates_json|escapejs }}');
+        const prices = {
+            "2025-03-13": "$84",
+            "2025-03-14": "$169",
+            "2025-03-23": "$76",
+            "2025-03-27": "$109",
+            "2025-03-28": "$109",
+        };
+
+        // Function to format and inject price
+        function customizeDay(dateElem, dateStr) {
+            if (prices[dateStr]) {
+                const priceTag = document.createElement('span');
+                priceTag.className = 'text-xs text-gray-500';
+                priceTag.textContent = prices[dateStr];
+                dateElem.appendChild(priceTag);
+            }
+
+            // Highlight booked dates
+            if (bookedDates.includes(dateStr)) {
+                dateElem.classList.add('bg-gray-300', 'text-white', 'rounded-full');
+            }
+        }
+
+        const endCalendar = flatpickr("#end_date", {
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disable: bookedDates,
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+                customizeDay(dayElem, dateStr);
+            }
+        });
+
+        flatpickr("#start_date", {
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disable: bookedDates,
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+                customizeDay(dayElem, dateStr);
+            },
+            onChange: function(selectedDates, dateStr) {
+                if (selectedDates.length > 0) {
+                    endCalendar.set('minDate', dateStr);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

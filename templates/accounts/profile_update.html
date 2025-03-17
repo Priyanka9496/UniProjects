@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center mb-4">👤 Update Profile</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-4 rounded bg-green-100 text-green-800 border border-green-300">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+            Update Profile
+        </button>
+    </form>
+</div>
+{% endblock %}

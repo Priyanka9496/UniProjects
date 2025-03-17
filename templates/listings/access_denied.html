@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+<div class="text-center py-16">
+    <h2 class="text-3xl font-bold text-red-600">{{ message }}</h2>
+    <a href="{% url 'listings:property_list' %}" class="mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded">
+        🔙 Back to Listings
+    </a>
+</div>
+{% endblock %}

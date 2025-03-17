@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Property Listings{% endblock %}
+
+{% block content %}
+
+    <!-- Header Section -->
+<header class="bg-indigo-700 text-white py-8 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-4xl font-extrabold tracking-tight">🏡 Property Listings</h1>
+        <a href="{% url 'listings:home' %}" class="bg-gray-700 hover:bg-gray-900 text-white py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                        🏠 Back to Home
+                    </a>
+                </div>
+    </header>
+
+    <!-- Properties Grid -->
+    <main class="container mx-auto my-10">
+        {% if properties %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                {% for property in properties %}
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-500 transform hover:scale-105">
+                    <img src="{{ property.image.url }}" alt="{{ property.title }}" class="h-56 w-full object-cover">
+                    <div class="p-6 space-y-4">
+                        <h2 class="text-2xl font-bold text-indigo-700">{{ property.title }}</h2>
+                        <p class="text-gray-600">{{ property.description|truncatewords:20 }}</p>
+
+                        <div class="space-y-1">
+                            <p><strong>Address:</strong> {{ property.address }}</p>
+                            <p><strong class="text-green-600">Price Per Night:</strong> ${{ property.price_per_night }}</p>
+                            <p><strong>Available:</strong> {{ property.available|yesno:"Yes,No" }}</p>
+                            <p><strong>Verified:</strong> {{ property.is_verified|yesno:"Yes,No" }}</p>
+                            </div>
+
+                        <div class="flex space-x-4">
+                                <a href="{% url 'listings:property_detail' property.id %}"
+                               class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                                    🔍 View Details
+                                </a>
+                                {% if user.is_staff and not property.is_verified %}
+                                    <a href="{% url 'listings:approve_property' property.id %}"
+                                   class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                                        ✅ Approve Property
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+        <p class="text-center text-gray-500 text-xl mt-10">No verified properties available at the moment.</p>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 mb-4 text-sm rounded-lg shadow-md
+                {% if message.tags == 'error' %}bg-red-100 text-red-800
+                {% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-800
+                {% else %}bg-green-100 text-green-800{% endif %}">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </main>
+
+    <!-- Footer Section -->
+<footer class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Property Listings. All rights reserved.</p>
+        </div>
+    </footer>
+
+{% endblock %}

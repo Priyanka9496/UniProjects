@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Payment{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center mb-6">💳 Enter Payment Details</h2>
+
+    <p class="mb-4 text-gray-600">Booking for: <strong>{{ booking.property.title }}</strong></p>
+    <p class="mb-6 text-gray-600">Amount: <strong>${{ booking.property.price_per_night }}</strong></p>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+            Confirm Payment
+        </button>
+    </form>
+</div>
+{% endblock %}
