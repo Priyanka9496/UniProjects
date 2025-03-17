@@ -20,7 +20,7 @@ This is a Django-based web application for listing, viewing, and booking propert
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/Priyanka9496/UniProjects.git
+git@github.com:Priyanka9496/UniProjects.git
 cd repository-name
 ```
 
